@@ -37,11 +37,23 @@ def index():
     # Calculamos el inicio de la semana (Lunes)
     monday = today - timedelta(days=today.weekday()) + timedelta(weeks=week_offset)
 
+    # Diccionario de traducción
+    dias_espanol = {
+        "Monday": "Lunes",
+        "Tuesday": "Martes",
+        "Wednesday": "Miércoles",
+        "Thursday": "Jueves",
+        "Friday": "Viernes",
+        "Saturday": "Sábado",
+        "Sunday": "Domingo"
+    }
+
     days = []
     for i in range(7):
         day = monday + timedelta(days=i)
+        dia_ingles = day.strftime("%A")  # Obtiene el nombre en inglés
         days.append({
-            "label": day.strftime("%A"), # Nota: saldrá en inglés según tu OS
+            "label": dias_espanol.get(dia_ingles, dia_ingles), # Traduce usando el diccionario
             "date": day.strftime("%d/%m"),
             "key": day.strftime("%Y-%m-%d")
         })
