@@ -10,7 +10,7 @@ zona_horaria = pytz.timezone('America/Lima')
 
 USUARIOS_PERMITIDOS = [
     "cpinedo", "fgallardo", "jsouza", "edante", "gmenacho", "rmodesto", 
-    "a castillo", "lseijas", "agodoy", "jsangama", "ycampaña", "jcastillo", 
+    "acastillo", "lseijas", "agodoy", "jsangama", "ycampaña", "jcastillo", 
     "luehara", "fvelez", "rbarriga", "wburgos", "wortega", "emendoza", 
     "hsoriano", "kdibos", "cdávila", "egarcia", "jpadilla", "jcatalan", 
     "jstrella", "achan", "jsalas", "kmelendez"
@@ -84,7 +84,8 @@ def index():
         days=days,
         week_offset=week_offset,
         hoy_key=today.strftime("%Y-%m-%d"),    # <--- Agregar esto
-        manana_key=manana.strftime("%Y-%m-%d") # <--- Agregar esto
+        manana_key=manana.strftime("%Y-%m-%d"), # <--- Agregar esto
+        usuarios_permitidos=USUARIOS_PERMITIDOS
     )
 
 

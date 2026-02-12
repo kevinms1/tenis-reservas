@@ -116,5 +116,13 @@ function intentarReservar(el, dia, hora) {
 // NOTA: El bloque de "Filtro para Celulares" que estaba aquí ha sido eliminado 
 // porque ahora lo controla el backend con 'show-mobile'.
 </script>
+
+<datalist id="usuarios-lista">
+    {% for usuario in usuarios_permitidos %}
+    <option value="{{ usuario }}">
+    {% endfor %}
+</datalist>
+
+
 </body>
 </html>
