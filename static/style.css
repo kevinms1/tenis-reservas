@@ -48,3 +48,19 @@ th { background-color: #007bff; color: white; }
         padding: 8px 2px;
     }
 }
+
+@media (max-width: 768px) {
+
+    .week-navigation {
+        display: none;
+    }
+
+}
+
+@media (max-width: 768px) {
+
+    h2 {
+        font-size: 22px;
+    }
+
+}
