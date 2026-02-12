@@ -1,23 +1,31 @@
 from flask import Flask, render_template, request, jsonify
 import sqlite3
 from datetime import datetime, timedelta
+import psycopg2 # Cambiamos sqlite3 por psycopg2
+from psycopg2.extras import RealDictCursor
+import os
+
 
 app = Flask(__name__)
 
 def get_db():
-    conn = sqlite3.connect("reservas.db", check_same_thread=False)
-    conn.row_factory = sqlite3.Row
+    # Render nos dará la URL en una "Variable de Entorno" por seguridad
+    DATABASE_URL = os.environ.get('DATABASE_URL') 
     
-    # ESTO CREARÁ LA TABLA SI NO EXISTE EN RENDER
-    conn.execute('''
-        CREATE TABLE IF NOT EXISTS reservas (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            dia TEXT NOT NULL,
-            hora TEXT NOT NULL,
-            nombre TEXT NOT NULL,
-            UNIQUE(dia, hora)
-        )
-    ''')
+    conn = psycopg2.connect(DATABASE_URL, cursor_factory=RealDictCursor)
+    
+    # Crear la tabla si no existe (Sintaxis Postgres)
+    with conn.cursor() as cur:
+        cur.execute('''
+            CREATE TABLE IF NOT EXISTS reservas (
+                id SERIAL PRIMARY KEY,
+                dia TEXT NOT NULL,
+                hora TEXT NOT NULL,
+                nombre TEXT NOT NULL,
+                UNIQUE(dia, hora)
+            )
+        ''')
+    conn.commit()
     return conn
 
 @app.route("/")
@@ -69,7 +77,7 @@ def reservar():
     db = get_db()
     cur = db.cursor()
     try:
-        cur.execute("INSERT INTO reservas (dia, hora, nombre) VALUES (?, ?, ?)", 
+        cur.execute("INSERT INTO reservas (dia, hora, nombre) VALUES (%s, %s, %s)", 
                    (data["dia"], data["hora"], data["nombre"]))
         db.commit()
         return jsonify({"status": "ok"})
@@ -81,7 +89,7 @@ def liberar():
     data = request.json
     db = get_db()
     cur = db.cursor()
-    cur.execute("DELETE FROM reservas WHERE dia=? AND hora=?", (data["dia"], data["hora"]))
+    cur.execute("DELETE FROM reservas WHERE dia=%s AND hora=%s", (data["dia"], data["hora"]))
     db.commit()
     return jsonify({"status": "ok"})
 
