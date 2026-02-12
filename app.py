@@ -4,6 +4,9 @@ from datetime import datetime, timedelta
 import psycopg2 # Cambiamos sqlite3 por psycopg2
 from psycopg2.extras import RealDictCursor
 import os
+import pytz # Importante para manejar zonas horarias
+zona_horaria = pytz.timezone('America/Lima')
+
 
 USUARIOS_PERMITIDOS = [
     "cpinedo", "fgallardo", "jsouza", "edante", "gmenacho", "rmodesto", 
@@ -39,7 +42,7 @@ def get_db():
 @app.route("/")
 def index():
     week_offset = int(request.args.get("week", 0))
-    today = datetime.today()
+    today = datetime.now(zona_horaria)
     manana = today + timedelta(days=1)
     
     # Calculamos el inicio de la semana (Lunes)
@@ -84,12 +87,16 @@ def index():
         manana_key=manana.strftime("%Y-%m-%d") # <--- Agregar esto
     )
 
+
 @app.route("/reservar", methods=["POST"])
 def reservar():
     data = request.json
     nombre_input = data.get("nombre", "").strip().lower()
     dia_reserva = data.get("dia")   # Formato 'YYYY-MM-DD'
     hora_reserva = data.get("hora") # Formato 'H:00'
+    
+    # 1. DEFINIMOS LA HORA DE LIMA (Usamos replace para que sea comparable con la DB)
+    ahora_peru = datetime.now(zona_horaria).replace(tzinfo=None)
 
     # 1. VALIDACIÓN DE LISTA BLANCA
     if nombre_input not in USUARIOS_PERMITIDOS:
@@ -98,7 +105,6 @@ def reservar():
             "message": "❌ Tu nombre no está en la lista de jugadores autorizados."
         }), 403
     
-    # 2. VALIDACIÓN DE REGLA DE 5 HORAS
     conn = get_db()
     cur = conn.cursor()
     
@@ -114,26 +120,25 @@ def reservar():
 
         if ultima_reserva:
             # Convertimos la fecha y hora de la última reserva a un objeto datetime
-            # Asumimos que hora viene como '6:00', '10:00', etc.
             fecha_ult = datetime.strptime(f"{ultima_reserva['dia']} {ultima_reserva['hora']}", "%Y-%m-%d %H:%M")
             
-            # Calculamos cuándo se libera el bloqueo (Hora de reserva + 5 horas)
+            # Calculamos cuándo se libera el bloqueo (Hora de inicio de reserva + 5 horas)
             momento_liberacion = fecha_ult + timedelta(hours=5)
-            ahora = datetime.now()
 
-            if ahora < momento_liberacion:
-                tiempo_restante = momento_liberacion - ahora
+            # COMPARACIÓN CRÍTICA: Comparamos momento_liberacion contra la hora de PERÚ
+            if ahora_peru < momento_liberacion:
+                tiempo_restante = momento_liberacion - ahora_peru
                 horas_faltan = int(tiempo_restante.total_seconds() // 3600)
                 minutos_faltan = int((tiempo_restante.total_seconds() % 3600) // 60)
                 
                 return jsonify({
                     "status": "error", 
-                    "message": f"⏳ Regla anti-acaparamiento: Debes esperar 5h desde tu última reserva. Podrás reservar de nuevo en {horas_faltan}h {minutos_faltan}min."
+                    "message": f"⏳ Regla anti-acaparamiento: Debes esperar 5h desde tu última reserva. Podrás reservar de nuevo en {horas_faltan}h {minutos_faltan}min (a las {momento_liberacion.strftime('%H:%M')})."
                 }), 403
 
         # Si pasa todas las reglas, procedemos a insertar
         cur.execute("INSERT INTO reservas (dia, hora, nombre) VALUES (%s, %s, %s)", 
-                   (dia_reserva, hora_reserva, data.get("nombre").strip()))
+                    (dia_reserva, hora_reserva, data.get("nombre").strip()))
         conn.commit()
         return jsonify({"status": "ok"})
 
