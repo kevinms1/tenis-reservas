@@ -1,19 +1,39 @@
-body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; background-color: #f4f4f9; color: #333; }
+body { 
+    font-family: 'Segoe UI', sans-serif; 
+    text-align: center; 
+    background-color: #f0f4f0; /* Un gris verdoso muy claro */
+    color: #2c3e50; 
+}
+
 h2 { margin-top: 20px; }
 .nav-weeks { margin-bottom: 20px; }
-.nav-weeks a { text-decoration: none; color: #007bff; font-weight: bold; padding: 0 15px; }
+.nav-weeks a { 
+    color: #2d5a27; 
+    text-decoration: none; 
+    font-weight: bold; 
+    border: 1px solid #2d5a27;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
 
 .table-wrapper { width: 95%; margin: 0 auto; overflow-x: auto; background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
 
 table { width: 100%; border-collapse: collapse; min-width: 800px; }
 th, td { border: 1px solid #ddd; padding: 12px; text-align: center; }
-th { background-color: #007bff; color: white; }
+
+th { 
+    background-color: #2d5a27 !important; /* Verde bosque/tenis */
+    color: white; 
+}
 
 .hora-col { background-color: #f8f9fa; font-weight: bold; width: 80px; }
 .celda { cursor: pointer; transition: 0.3s; height: 40px; }
 .celda:hover:not(.ocupado) { background-color: #d4edda; }
 
-.ocupado { background-color: #ff4d4d !important; color: white; font-weight: bold; cursor: not-allowed; }
+.ocupado { 
+    background-color: #c0392b !important; 
+    color: white; 
+}
 
 /* Móvil */
 /* MODO CELULAR */
@@ -29,6 +49,16 @@ th { background-color: #007bff; color: white; }
     td[data-fecha] {
         display: none;
     }
+    th[data-fecha="{{ hoy_key }}"] {
+    background-color: #1e3d1a !important; /* Verde más oscuro para hoy */
+    position: relative;
+    }
+    th[data-fecha="{{ hoy_key }}"]::after {
+    content: "📍 HOY";
+    display: block;
+    font-size: 9px;
+    color: #ffeb3b; /* Amarillo pelota */
+}
 
     /* 3. Mostrar SOLO las que tengan la clase show-mobile */
     .show-mobile {
