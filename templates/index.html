@@ -49,14 +49,31 @@
 function intentarReservar(el, dia, hora) {
     if (el.classList.contains("ocupado")) {
         const nombreReserva = el.innerText;
-        const confirmar = confirm(`La cancha está reservada por: ${nombreReserva}.\n\n¿Quieres ELIMINAR esta reserva?`);
-        if (confirmar) {
-            fetch("/liberar", {
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({ dia, hora })
-            }).then(() => location.reload());
-        }
+
+        const password = prompt(`La cancha está reservada por: ${nombreReserva}.\nPara eliminarla, ingresa la contraseña:`);
+        
+        if (password === null) return; // Si cancela el prompt
+
+        // 2. Enviar la contraseña al servidor
+        fetch("/liberar", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({ 
+                dia: dia, 
+                hora: hora, 
+                password: password // Enviamos la clave ingresada
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === "ok") {
+                location.reload();
+            } else {
+                alert(data.message); // Mostrará "Contraseña incorrecta"
+            }
+        })
+        .catch(err => alert("Error al procesar la solicitud"));
+        
         return;
     }
 

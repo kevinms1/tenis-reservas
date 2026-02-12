@@ -99,11 +99,21 @@ def reservar():
 @app.route("/liberar", methods=["POST"]) # MUEVE ESTO AQUÍ (Arriba del if __name__)
 def liberar():
     data = request.json
-    db = get_db()
-    cur = db.cursor()
-    cur.execute("DELETE FROM reservas WHERE dia=%s AND hora=%s", (data["dia"], data["hora"]))
-    db.commit()
-    return jsonify({"status": "ok"})
+    password_usuario=data.get("password")
+
+    if password_usuario != "7770":
+        return jsonify({"status": "error", "message": "Contraseña incorrecta"}), 403
+    conn = get_db()
+    cur = conn.cursor()
+    try:
+        cur.execute("DELETE FROM reservas WHERE dia=%s AND hora=%s", (data["dia"], data["hora"]))
+        conn.commit()
+        return jsonify({"status": "ok"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+    finally:
+        cur.close()
+        conn.close()
 
 
 if __name__ == "__main__":
