@@ -5,9 +5,19 @@ from datetime import datetime, timedelta
 app = Flask(__name__)
 
 def get_db():
-    # check_same_thread=False es necesario para Flask + SQLite
     conn = sqlite3.connect("reservas.db", check_same_thread=False)
-    conn.row_factory = sqlite3.Row # Permite acceder por nombre de columna
+    conn.row_factory = sqlite3.Row
+    
+    # ESTO CREARÁ LA TABLA SI NO EXISTE EN RENDER
+    conn.execute('''
+        CREATE TABLE IF NOT EXISTS reservas (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            dia TEXT NOT NULL,
+            hora TEXT NOT NULL,
+            nombre TEXT NOT NULL,
+            UNIQUE(dia, hora)
+        )
+    ''')
     return conn
 
 @app.route("/")
