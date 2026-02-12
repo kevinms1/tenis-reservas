@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservas Tenis</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h2>🎾 Reserva de Cancha</h2>
+
+    <div class="nav-weeks">
+        <a href="/?week={{ week_offset - 1 }}">⬅ Semana anterior</a>
+        <span> Semana Actual </span>
+        <a href="/?week={{ week_offset + 1 }}">Semana siguiente ➡</a>
+    </div>
+
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Hora</th>
+                    {% for day in days %}
+                    <th data-fecha="{{ day.key }}" 
+                    class="{% if day.key == hoy_key or day.key == manana_key %}show-mobile{% endif %}">
+                    {{ day.label }}<br>{{ day.date }}
+    </th>
+    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+    {% for h in range(6, 20) %} 
+    <tr>
+        <td class="hora-col">{{h}}:00</td>
+        {% for day in days %}
+            {% set key = day.key ~ '-' ~ h ~ ':00' %}
+            {% set ocupado = reservas.get(key) %}
+            <td data-fecha="{{ day.key }}" 
+                class="celda {% if ocupado %}ocupado{% endif %} {% if day.key == hoy_key or day.key == manana_key %}show-mobile{% endif %}"
+                onclick="intentarReservar(this, '{{day.key}}', '{{h}}:00')">
+                {{ ocupado if ocupado else '' }}
+            </td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</tbody>
+
+<script>
+function intentarReservar(el, dia, hora) {
+    if (el.classList.contains("ocupado")) {
+        const nombreReserva = el.innerText;
+        const confirmar = confirm(`La cancha está reservada por: ${nombreReserva}.\n\n¿Quieres ELIMINAR esta reserva?`);
+        if (confirmar) {
+            fetch("/liberar", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({ dia, hora })
+            }).then(() => location.reload());
+        }
+        return;
+    }
+
+    const ahora = new Date();
+    ahora.setSeconds(0, 0);
+
+    const [anio, mes, d] = dia.split('-').map(Number);
+    const [h, m] = hora.split(':').map(Number);
+    // mes - 1 porque en JS Enero es 0
+    const fechaReserva = new Date(anio, mes - 1, d, h, m, 0, 0);
+
+    const diferenciaMs = fechaReserva - ahora;
+    const unDiaEnMs = 24 * 60 * 60 * 1000;
+
+    if (diferenciaMs > unDiaEnMs) {
+        alert("⏳ No puedes reservar con más de 24h de anticipación.");
+        return;
+    }
+    
+    if (diferenciaMs < 0) {
+        alert("🚫 Este horario ya pasó.");
+        return;
+    }
+
+    let nombre = prompt("Ingresa tu nombre:");
+    if (!nombre) return;
+
+    fetch("/reservar", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({dia, hora, nombre})
+    }).then(res => res.json()).then(data => {
+        if (data.status === "ok") {
+            location.reload();
+        } else {
+            alert(data.message);
+        }
+    });
+}
+// NOTA: El bloque de "Filtro para Celulares" que estaba aquí ha sido eliminado 
+// porque ahora lo controla el backend con 'show-mobile'.
+</script>
+</body>
+</html>

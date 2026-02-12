@@ -1,0 +1,50 @@
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; background-color: #f4f4f9; color: #333; }
+h2 { margin-top: 20px; }
+.nav-weeks { margin-bottom: 20px; }
+.nav-weeks a { text-decoration: none; color: #007bff; font-weight: bold; padding: 0 15px; }
+
+.table-wrapper { width: 95%; margin: 0 auto; overflow-x: auto; background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+
+table { width: 100%; border-collapse: collapse; min-width: 800px; }
+th, td { border: 1px solid #ddd; padding: 12px; text-align: center; }
+th { background-color: #007bff; color: white; }
+
+.hora-col { background-color: #f8f9fa; font-weight: bold; width: 80px; }
+.celda { cursor: pointer; transition: 0.3s; height: 40px; }
+.celda:hover:not(.ocupado) { background-color: #d4edda; }
+
+.ocupado { background-color: #ff4d4d !important; color: white; font-weight: bold; cursor: not-allowed; }
+
+/* Móvil */
+/* MODO CELULAR */
+@media (max-width: 768px) {
+    /* 1. Forzar que la tabla no sea más ancha que la pantalla */
+    table {
+        min-width: 100% !important;
+        table-layout: fixed;
+    }
+
+    /* 2. Ocultar todas las columnas de fecha por defecto */
+    th[data-fecha], 
+    td[data-fecha] {
+        display: none;
+    }
+
+    /* 3. Mostrar SOLO las que tengan la clase show-mobile */
+    .show-mobile {
+        display: table-cell !important;
+        width: 40%; /* Ajusta para que quepan dos columnas + hora */
+    }
+
+    /* 4. Ajustar la columna de la hora para que no ocupe mucho espacio */
+    .hora-col {
+        width: 50px;
+        font-size: 11px;
+        padding: 5px 2px;
+    }
+
+    th {
+        font-size: 12px;
+        padding: 8px 2px;
+    }
+}
