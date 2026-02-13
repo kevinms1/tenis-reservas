@@ -100,17 +100,12 @@ function intentarReservar(el, dia, hora) {
     .then(res => res.json())
     .then(data => {
         if (data.status === "ok") {
-            // Lógica de WhatsApp corregida
             const texto = `🎾 *Nueva Reserva de Cancha*%0A👤 *Nombre:* ${nombre}%0A📅 *Día:* ${dia}%0A⏰ *Hora:* ${hora}`;
             const urlWhatsApp = `https://wa.me/?text=${texto}`;
 
-            alert("¡Reserva exitosa! Al cerrar este aviso, se abrirá WhatsApp para informar al grupo.");
-            
-            // Abrimos WhatsApp
-            window.open(urlWhatsApp, '_blank');
-            
-            // Recargamos la página
-            location.reload();
+            // En móviles, location.href es mucho más confiable que window.open
+            // El navegador lo detecta como una navegación legítima y abre WhatsApp directo
+            window.location.href = urlWhatsApp;
         } else {
             alert(data.message);
         }
