@@ -1,11 +1,13 @@
+/* --- CONFIGURACIÓN GENERAL Y PC --- */
 body { 
     font-family: 'Segoe UI', sans-serif; 
     text-align: center; 
-    background-color: #f0f4f0; /* Un gris verdoso muy claro */
+    background-color: #f0f4f0; 
     color: #2c3e50; 
 }
 
 h2 { margin-top: 20px; }
+
 .nav-weeks { margin-bottom: 20px; }
 .nav-weeks a { 
     color: #2d5a27; 
@@ -16,13 +18,30 @@ h2 { margin-top: 20px; }
     border-radius: 5px;
 }
 
-.table-wrapper { width: 95%; margin: 0 auto; overflow-x: auto; background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+.table-wrapper { 
+    width: 95%; 
+    margin: 0 auto; 
+    overflow-x: auto; 
+    background: white; 
+    border-radius: 8px; 
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+}
 
-table { width: 100%; border-collapse: collapse; min-width: 800px; }
+table { 
+    width: 100%; 
+    border-collapse: collapse; 
+    /* Quitamos el min-width de aquí para que no estorbe en el móvil */
+}
+
+/* Aplicamos el min-width SOLO cuando la pantalla sea grande (PC) */
+@media (min-width: 769px) {
+    table { min-width: 800px; }
+}
+
 th, td { border: 1px solid #ddd; padding: 12px; text-align: center; }
 
 th { 
-    background-color: #2d5a27 !important; /* Verde bosque/tenis */
+    background-color: #2d5a27 !important; 
     color: white; 
 }
 
@@ -35,70 +54,52 @@ th {
     color: white; 
 }
 
-/* Móvil */
-/* MODO CELULAR */
+/* --- VISTA MÓVIL OPTIMIZADA (3 COLUMNAS) --- */
 @media (max-width: 768px) {
-    /* Quitamos el min-width que estiraba la tabla en PC */
-    table {
-        min-width: 100% !important; 
-        width: 100% !important;
-        table-layout: fixed !important; /* Fuerza a las columnas a no pasarse del borde */
-    }
-
+    /* Quitamos el scroll y forzamos ancho de pantalla */
     .table-wrapper {
         width: 100% !important;
         margin: 0 !important;
-        overflow-x: hidden !important; /* Elimina el scroll lateral */
+        overflow-x: hidden !important; 
         border-radius: 0;
     }
 
-    /* Ocultamos los días que no son Hoy/Mañana */
+    table {
+        min-width: 100% !important; 
+        width: 100% !important;
+        table-layout: fixed !important; /* Obliga a respetar los porcentajes */
+    }
+
+    /* Ocultamos los días que no nos interesan */
     th[data-fecha], 
     td[data-fecha] {
         display: none;
     }
 
-    /* Mostramos solo Hora + Hoy + Mañana */
+    /* Mostramos solo Hora, Hoy y Mañana */
     .hora-col, 
     .show-mobile {
         display: table-cell !important;
     }
 
-    /* REPARTO DE ESPACIO (Total 100%) */
+    /* Reparto exacto para que no se salga de la pantalla */
     .hora-col {
-        width: 20% !important; /* Columna pequeña para la hora */
-        font-size: 11px !important;
-        padding: 5px 2px !important;
-    }
-
-    .show-mobile {
-        width: 40% !important; /* 40% para Hoy y 40% para Mañana */
+        width: 20% !important;
         font-size: 10px !important;
         padding: 8px 2px !important;
     }
 
-    /* Ajuste de las celdas de reserva */
+    .show-mobile {
+        width: 40% !important;
+        font-size: 10px !important;
+        padding: 8px 2px !important;
+    }
+
     .celda {
-        height: 50px !important; /* Altura cómoda para tocar con el dedo */
-        word-break: break-word; /* Si el nombre es largo, salta de línea */
+        height: 55px !important; /* Más alta para que sea fácil tocar con el dedo */
+        word-break: break-all; /* Rompe el texto si el nombre es muy largo */
     }
 
-    h2 { font-size: 20px; }
-    .week-navigation { display: none; }
-}
-
-@media (max-width: 768px) {
-
-    .week-navigation {
-        display: none;
-    }
-
-}
-
-@media (max-width: 768px) {
-
-    h2 {
-        font-size: 22px;
-    }
-
+    h2 { font-size: 18px; }
+    .nav-weeks { display: none; }
 }
