@@ -123,8 +123,8 @@ def reservar():
             # Convertimos la fecha y hora de la última reserva a un objeto datetime
             fecha_ult = datetime.strptime(f"{ultima_reserva['dia']} {ultima_reserva['hora']}", "%Y-%m-%d %H:%M")
             
-            # Calculamos cuándo se libera el bloqueo (Hora de inicio de reserva + 5 horas)
-            momento_liberacion = fecha_ult + timedelta(hours=5)
+            # Calculamos cuándo se libera el bloqueo (Hora de inicio de reserva + 3 horas)
+            momento_liberacion = fecha_ult + timedelta(hours=3)
 
             # COMPARACIÓN CRÍTICA: Comparamos momento_liberacion contra la hora de PERÚ
             if ahora_peru < momento_liberacion:
@@ -134,7 +134,7 @@ def reservar():
                 
                 return jsonify({
                     "status": "error", 
-                    "message": f"⏳ Regla anti-acaparamiento: Debes esperar 5h desde tu última reserva. Podrás reservar de nuevo en {horas_faltan}h {minutos_faltan}min (a las {momento_liberacion.strftime('%H:%M')})."
+                    "message": f"⏳ Regla anti-acaparamiento: Debes esperar 3h desde tu última reserva. Podrás reservar de nuevo en {horas_faltan}h {minutos_faltan}min (a las {momento_liberacion.strftime('%H:%M')})."
                 }), 403
 
         # Si pasa todas las reglas, procedemos a insertar
