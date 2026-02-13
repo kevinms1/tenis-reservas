@@ -67,7 +67,25 @@ function intentarReservar(el, dia, hora) {
         .then(res => res.json())
         .then(data => {
             if (data.status === "ok") {
+                const nombreParaMsj = document.getElementById("nombreInput").value; // Ajusta según tu ID de input
+                const fechaParaMsj = dia_reserva; // La variable que ya usas para el día
+                const horaParaMsj = hora_reserva; // La variable que ya usas para la hora
+
+                // 2. Creamos el texto del mensaje (formateado para WhatsApp)
+                const texto = `🎾 *Nueva Reserva de Cancha* %0A👤 *Nombre:* ${nombreParaMsj} %0A📅 *Día:* ${fechaParaMsj} %0A⏰ *Hora:* ${horaParaMsj}`;
+                
+                // 3. Definimos el enlace (puedes usar el link de grupo o un número específico)
+                // Si tienes el link del grupo de tenis, ponlo aquí. Si no, usa el formato de mensaje directo:
+                const urlWhatsApp = `https://wa.me/?text=${texto}`; 
+
+                alert("¡Reserva exitosa! Ahora serás redirigido a WhatsApp para avisar al grupo.");
+
+                // 4. Abrimos WhatsApp en una nueva pestaña o aplicación
+                window.open(urlWhatsApp, '_blank');
+
+                // 5. Recargamos la página para mostrar la celda ocupada
                 location.reload();
+                
             } else {
                 alert(data.message); // Mostrará "Contraseña incorrecta"
             }
