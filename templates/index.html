@@ -22,9 +22,9 @@
                     <th>Hora</th>
                     {% for day in days %}
                     <th data-fecha="{{ day.key }}" 
-                    class="{% if day.key == hoy_key or day.key == manana_key %}show-mobile{% endif %}">
-                    {{ day.label }}<br>{{ day.date }}
-    </th>
+                        class="{% if day.key == hoy_key or day.key == manana_key or (loop.first and week_offset == 1) %}show-mobile{% endif %}">
+                            {{ day.label }}<br>{{ day.date }}
+                    </th>
     {% endfor %}
                 </tr>
             </thead>

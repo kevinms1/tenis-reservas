@@ -45,9 +45,17 @@ def index():
     today = datetime.now(zona_horaria)
     manana = today + timedelta(days=1)
     
-    # Calculamos el inicio de la semana (Lunes)
-    monday = today - timedelta(days=today.weekday()) + timedelta(weeks=week_offset)
-
+    # Si hoy es domingo (weekday == 6), y no hemos pedido ver otra semana, 
+    # ajustamos para que el lunes sea el de la próxima semana
+    dia_semana = today.weekday()
+    
+    # Esta lógica hace que el calendario se sienta "continuo"
+    monday = today - timedelta(days=dia_semana) + timedelta(weeks=week_offset)
+    
+    # OPCIONAL: Si quieres que el Domingo por la tarde ya se vea la semana entrante:
+    # if dia_semana == 6 and week_offset == 0:
+    #     monday = monday + timedelta(weeks=1)
+    
     # Diccionario de traducción
     dias_espanol = {
         "Monday": "Lunes",
