@@ -10,7 +10,7 @@ body {
 
 h2 { margin-top: 15px; margin-bottom: 10px; }
 
-/* Navegación de semanas (PC) */
+/* Navegación de semanas */
 .week-navigation { margin-bottom: 20px; }
 .week-navigation a { 
     color: #2d5a27; 
@@ -38,7 +38,6 @@ table {
 /* Escritorio */
 @media (min-width: 769px) {
     table { min-width: 800px; }
-    .nav-container { display: none; } /* Ocultar botones de móvil en PC */
 }
 
 th, td { border: 1px solid #ddd; padding: 12px; text-align: center; }
@@ -57,23 +56,63 @@ th {
     color: white; 
 }
 
-/* --- VISTA MÓVIL SUPER COMPACTA (PARA CAPTURA DE PANTALLA ÚNICA) --- */
+/* --- VISTA MÓVIL OPTIMIZADA (AJUSTE PARA CAPTURA DE PANTALLA) --- */
 @media (max-width: 768px) {
     
-    /* 1. REDUCIR TÍTULO Y NAVEGACIÓN */
-    h2 { 
-        font-size: 15px !important; 
-        margin: 5px 0 !important; 
+    /* 1. OCULTAR BOTONES DE SEMANA ANTERIOR/SIGUIENTE */
+    .week-navigation { 
+        display: none !important; 
     }
 
-    .nav-container { 
-        display: flex !important; 
-        justify-content: center;
-        gap: 5px;
-        margin: 5px 0 8px 0 !important;
+    /* 2. AJUSTAR CONTENEDOR PARA QUE NO TENGA MÁRGENES */
+    .table-wrapper {
+        width: 100% !important;
+        margin: 0 !important;
+        overflow: hidden !important; 
+        border-radius: 0;
+        box-shadow: none;
     }
 
-    .btn-nav {
-        background-color: #2d5a27;
-        color: white;
-        text
+    table {
+        table-layout: fixed !important; 
+        width: 100% !important;
+    }
+
+    /* Ocultar días que no son hoy ni mañana */
+    th[data-fecha], 
+    td[data-fecha] {
+        display: none;
+    }
+
+    /* Mostrar solo Hora, Hoy y Mañana */
+    .hora-col, 
+    .show-mobile {
+        display: table-cell !important;
+    }
+
+    /* REDUCCIÓN DE TAMAÑOS PARA QUE QUEPA TODO */
+    .hora-col {
+        width: 18% !important;
+        font-size: 11px !important;
+        padding: 4px 1px !important; /* Padding mínimo */
+    }
+
+    .show-mobile {
+        width: 41% !important;
+        font-size: 10px !important;
+        padding: 4px 1px !important; /* Padding mínimo */
+    }
+
+    /* Reducir altura de filas para evitar el scroll */
+    .celda {
+        height: 32px !important; /* Reducido de 55px a 32px */
+        line-height: 1 !important;
+    }
+
+    th {
+        padding: 6px 2px !important;
+        font-size: 11px !important;
+    }
+
+    h2 { font-size: 16px; margin: 8px 0; }
+}
