@@ -10,7 +10,7 @@ body {
 
 h2 { margin-top: 15px; margin-bottom: 10px; }
 
-/* Navegación de semanas */
+/* Navegación de semanas (PC) */
 .week-navigation { margin-bottom: 20px; }
 .week-navigation a { 
     color: #2d5a27; 
@@ -38,6 +38,7 @@ table {
 /* Escritorio */
 @media (min-width: 769px) {
     table { min-width: 800px; }
+    .nav-container { display: none; } /* Ocultar botones de móvil en PC */
 }
 
 th, td { border: 1px solid #ddd; padding: 12px; text-align: center; }
@@ -56,45 +57,23 @@ th {
     color: white; 
 }
 
-/* --- VISTA MÓVIL OPTIMIZADA (AJUSTE PARA CAPTURA DE PANTALLA) --- */
+/* --- VISTA MÓVIL SUPER COMPACTA (PARA CAPTURA DE PANTALLA ÚNICA) --- */
 @media (max-width: 768px) {
-    /* 1. MOSTRAR NAVEGACIÓN COMO BOTONES */
+    
+    /* 1. REDUCIR TÍTULO Y NAVEGACIÓN */
+    h2 { 
+        font-size: 15px !important; 
+        margin: 5px 0 !important; 
+    }
+
     .nav-container { 
         display: flex !important; 
         justify-content: center;
-        gap: 10px;
-        margin: 10px 0;
+        gap: 5px;
+        margin: 5px 0 8px 0 !important;
     }
 
     .btn-nav {
         background-color: #2d5a27;
         color: white;
-        text-decoration: none;
-        padding: 8px 15px;
-        border-radius: 20px;
-        font-size: 13px;
-        font-weight: bold;
-    }
-
-    .btn-hoy { background-color: #2c3e50; }
-
-    /* 2. AJUSTE DE TABLA */
-    .table-wrapper {
-        width: 100% !important;
-        margin: 0 !important;
-        overflow: hidden !important; 
-        border-radius: 0;
-    }
-
-    table { table-layout: fixed !important; width: 100% !important; }
-
-    th[data-fecha], td[data-fecha] { display: none; }
-
-    .hora-col, .show-mobile { display: table-cell !important; }
-
-    .hora-col { width: 18% !important; font-size: 11px !important; }
-    .show-mobile { width: 41% !important; font-size: 10px !important; }
-
-    .celda { height: 35px !important; }
-    h2 { font-size: 18px; }
-}
+        text
