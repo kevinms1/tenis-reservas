@@ -9,10 +9,10 @@
 <body>
     <h2>🎾 Reserva de Cancha</h2>
 
-    <div class="week-navigation">
-        <a href="/?week={{ week_offset - 1 }}">⬅ Semana anterior</a>
-            |
-        <a href="/?week={{ week_offset + 1 }}">Semana siguiente ➡</a>
+    <div class="nav-container">
+        <a href="/?day_offset={{ day_offset - 2 }}" class="btn-nav">⬅ Ant.</a>
+        <a href="/" class="btn-nav btn-hoy">Hoy</a>
+        <a href="/?day_offset={{ day_offset + 2 }}" class="btn-nav">Sig. ➡</a>
     </div>
 
     <div class="table-wrapper">
@@ -22,28 +22,30 @@
                     <th>Hora</th>
                     {% for day in days %}
                     <th data-fecha="{{ day.key }}" 
-                        class="{% if day.key == hoy_key or day.key == manana_key or (loop.first and week_offset == 1) %}show-mobile{% endif %}">
-                            {{ day.label }}<br>{{ day.date }}
+                        class="{% if loop.index <= 2 %}show-mobile{% endif %}">
+                        {{ day.label }}<br>{{ day.date }}
                     </th>
-    {% endfor %}
+                    {% endfor %}
                 </tr>
             </thead>
             <tbody>
-    {% for h in range(6, 20) %} 
-    <tr>
-        <td class="hora-col">{{h}}:00</td>
-        {% for day in days %}
-            {% set key = day.key ~ '-' ~ h ~ ':00' %}
-            {% set ocupado = reservas.get(key) %}
-            <td data-fecha="{{ day.key }}" 
-                class="celda {% if ocupado %}ocupado{% endif %} {% if day.key == hoy_key or day.key == manana_key %}show-mobile{% endif %}"
-                onclick="intentarReservar(this, '{{day.key}}', '{{h}}:00')">
-                {{ ocupado if ocupado else '' }}
-            </td>
-        {% endfor %}
-    </tr>
-    {% endfor %}
-</tbody>
+                {% for h in range(6, 20) %} 
+                <tr>
+                    <td class="hora-col">{{h}}:00</td>
+                    {% for day in days %}
+                        {% set key = day.key ~ '-' ~ h ~ ':00' %}
+                        {% set ocupado = reservas.get(key) %}
+                        <td data-fecha="{{ day.key }}" 
+                            class="celda {% if ocupado %}ocupado{% endif %} {% if loop.index <= 2 %}show-mobile{% endif %}"
+                            onclick="intentarReservar(this, '{{day.key}}', '{{h}}:00')">
+                            {{ ocupado if ocupado else '' }}
+                        </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
 <script>
 function intentarReservar(el, dia, hora) {

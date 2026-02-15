@@ -41,38 +41,27 @@ def get_db():
 
 @app.route("/")
 def index():
-    week_offset = int(request.args.get("week", 0))
+    # Ahora nos movemos por días (day_offset) en lugar de semanas
+    day_offset = int(request.args.get("day_offset", 0))
+    
     today = datetime.now(zona_horaria)
+    # El calendario empezará hoy + el desplazamiento
+    start_date = today + timedelta(days=day_offset)
+    
     manana = today + timedelta(days=1)
     
-    # Si hoy es domingo (weekday == 6), y no hemos pedido ver otra semana, 
-    # ajustamos para que el lunes sea el de la próxima semana
-    dia_semana = today.weekday()
-    
-    # Esta lógica hace que el calendario se sienta "continuo"
-    monday = today - timedelta(days=dia_semana) + timedelta(weeks=week_offset)
-    
-    # OPCIONAL: Si quieres que el Domingo por la tarde ya se vea la semana entrante:
-    # if dia_semana == 6 and week_offset == 0:
-    #     monday = monday + timedelta(weeks=1)
-    
-    # Diccionario de traducción
     dias_espanol = {
-        "Monday": "Lunes",
-        "Tuesday": "Martes",
-        "Wednesday": "Miércoles",
-        "Thursday": "Jueves",
-        "Friday": "Viernes",
-        "Saturday": "Sábado",
-        "Sunday": "Domingo"
+        "Monday": "Lunes", "Tuesday": "Martes", "Wednesday": "Miércoles",
+        "Thursday": "Jueves", "Friday": "Viernes", "Saturday": "Sábado", "Sunday": "Domingo"
     }
 
     days = []
+    # Generamos los próximos 7 días a partir de la fecha de inicio
     for i in range(7):
-        day = monday + timedelta(days=i)
-        dia_ingles = day.strftime("%A")  # Obtiene el nombre en inglés
+        day = start_date + timedelta(days=i)
+        dia_ingles = day.strftime("%A")
         days.append({
-            "label": dias_espanol.get(dia_ingles, dia_ingles), # Traduce usando el diccionario
+            "label": dias_espanol.get(dia_ingles, dia_ingles),
             "date": day.strftime("%d/%m"),
             "key": day.strftime("%Y-%m-%d")
         })
@@ -90,9 +79,9 @@ def index():
         "index.html",
         reservas=reservas,
         days=days,
-        week_offset=week_offset,
-        hoy_key=today.strftime("%Y-%m-%d"),    # <--- Agregar esto
-        manana_key=manana.strftime("%Y-%m-%d"), # <--- Agregar esto
+        day_offset=day_offset,
+        hoy_key=today.strftime("%Y-%m-%d"),
+        manana_key=manana.strftime("%Y-%m-%d"),
         usuarios_permitidos=USUARIOS_PERMITIDOS
     )
 
