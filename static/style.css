@@ -1,4 +1,4 @@
-/* --- CONFIGURACIÓN GENERAL (ESCRITORIO Y BASE) --- */
+/* --- CONFIGURACIÓN GENERAL --- */
 body { 
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
     text-align: center; 
@@ -8,16 +8,9 @@ body {
     padding: 0;
 }
 
-h2 { 
-    margin-top: 15px; 
-    margin-bottom: 10px; 
-    color: #2d5a27;
-}
+h2 { margin-top: 15px; margin-bottom: 10px; color: #2d5a27; }
 
-/* Navegación */
-.nav-container { 
-    margin-bottom: 20px; 
-}
+.nav-container { margin-bottom: 20px; }
 
 .btn-nav { 
     display: inline-block;
@@ -29,135 +22,83 @@ h2 {
     border-radius: 6px;
     background-color: white;
     margin: 0 5px;
-    transition: 0.3s;
 }
 
-.btn-nav:hover {
-    background-color: #2d5a27;
-    color: white;
-}
-
-/* Tabla Contenedor */
 .table-wrapper { 
     width: 95%; 
-    margin: 0 auto 30px auto; 
+    margin: 0 auto 20px auto; 
     overflow-x: auto; 
     background: white; 
     border-radius: 8px; 
     box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
 }
 
-table { 
-    width: 100%; 
-    border-collapse: collapse; 
-    table-layout: fixed;
+table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+
+th, td { border: 1px solid #ddd; padding: 12px; text-align: center; }
+
+th { background-color: #2d5a27 !important; color: white; }
+
+.hora-col { background-color: #f8f9fa; font-weight: bold; width: 80px; }
+
+.celda { height: 45px; cursor: pointer; }
+
+.ocupado { background-color: #c0392b !important; color: white; font-weight: bold; }
+
+/* --- ESTILO DEL CUADRO DE REGLAS --- */
+.reglas-container {
+    width: 90%;
+    max-width: 600px;
+    margin: 20px auto;
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 15px;
+    text-align: left;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    border: 1px solid #e0e0e0;
 }
 
-/* Estilos de Celda Escritorio */
-th, td { 
-    border: 1px solid #ddd; 
-    padding: 12px; 
-    text-align: center; 
-    overflow: hidden;
+.reglas-container h3 {
+    margin-top: 0;
+    font-size: 18px;
+    color: #333;
+    border-bottom: 2px solid #f0f4f0;
+    padding-bottom: 8px;
 }
 
-th { 
-    background-color: #2d5a27 !important; 
-    color: white; 
+.reglas-container ul {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 0 0;
 }
 
-.hora-col { 
-    background-color: #f8f9fa; 
-    font-weight: bold; 
-    width: 80px; 
-}
-
-.celda { 
-    cursor: pointer; 
-    transition: 0.3s; 
-    height: 45px;
+.reglas-container li {
     font-size: 14px;
+    margin-bottom: 8px;
+    color: #555;
 }
 
-.celda:hover:not(.ocupado) { 
-    background-color: #d4edda; 
-}
-
-.ocupado { 
-    background-color: #c0392b !important; 
-    color: white; 
-    font-weight: bold;
-}
-
-/* --- VISTA MÓVIL (OPTIMIZADA PARA CAPTURA DE PANTALLA ÚNICA) --- */
+/* --- VISTA MÓVIL OPTIMIZADA --- */
 @media (max-width: 768px) {
+    h2 { font-size: 14px; margin: 5px 0; }
+    .nav-container { margin-bottom: 8px !important; }
+    .table-wrapper { width: 100% !important; margin: 0 !important; border-radius: 0; }
     
-    /* 1. Reducción de márgenes superiores para ganar espacio vertical */
-    h2 { 
-        font-size: 14px; 
-        margin: 5px 0; 
-    }
+    th[data-fecha], td[data-fecha] { display: none; }
+    .hora-col, .show-mobile { display: table-cell !important; }
 
-    .nav-container { 
-        margin-bottom: 8px !important; 
-    }
+    .hora-col { width: 16% !important; font-size: 10px !important; padding: 2px 0 !important; }
+    .show-mobile { width: 42% !important; font-size: 9px !important; padding: 2px 1px !important; }
 
-    .btn-nav {
-        padding: 4px 10px !important;
-        font-size: 12px !important;
-    }
+    th { padding: 4px 1px !important; font-size: 11px !important; }
+    tr, .celda { height: 24px !important; }
 
-    /* 2. Ajuste total del contenedor */
-    .table-wrapper {
-        width: 100% !important;
-        margin: 0 !important;
-        border-radius: 0;
-        box-shadow: none;
+    /* Ajuste de reglas en móvil para que no ocupen mucho espacio */
+    .reglas-container { 
+        width: 95%; 
+        padding: 10px; 
+        margin-top: 10px;
     }
-
-    /* 3. Control de columnas: Solo Hora, Hoy y Mañana */
-    th[data-fecha], 
-    td[data-fecha] {
-        display: none;
-    }
-
-    .hora-col, 
-    .show-mobile {
-        display: table-cell !important;
-    }
-
-    /* 4. Proporciones de columnas para móviles */
-    .hora-col {
-        width: 16% !important;
-        font-size: 10px !important;
-        padding: 2px 0 !important;
-    }
-
-    .show-mobile {
-        width: 42% !important;
-        font-size: 9px !important;
-        padding: 2px 1px !important;
-        word-break: break-all; /* Evita que nombres largos ensanchen la fila */
-    }
-
-    /* 5. REDUCCIÓN CRÍTICA DE ALTURA (Para evitar scroll) */
-    th {
-        padding: 4px 1px !important;
-        font-size: 11px !important;
-    }
-
-    tr {
-        height: 24px !important; /* Altura mínima para que quepa todo el rango 6am-8pm */
-    }
-
-    .celda {
-        height: 24px !important;
-        line-height: 1 !important; /* Mantiene el texto centrado */
-        padding: 0 !important;
-    }
-
-    /* Opcional: ocultar el texto de la fecha para ganar más espacio si fuera necesario */
-    th br {
-        display: block;
-    }
+    .reglas-container h3 { font-size: 14px; }
+    .reglas-container li { font-size: 12px; }
 }
