@@ -12,7 +12,7 @@ USUARIOS_PERMITIDOS = [
     "cpinedo", "fgallardo", "jsouza", "edante", "gmenacho", "rmodesto", 
     "acastillo", "lseijas", "agodoy", "jsangama", "ycampaña", "jcastillo", 
     "luehara", "fvelez", "rbarriga", "wburgos", "wortega", "emendoza", 
-    "hsoriano", "kdibos", "cdávila", "egarcia", "jpadilla", "jcatalan", 
+    "hsoriano", "kdibos", "cdávila", "egarcia", "jpadilla", "rcatalan", 
     "jstrella", "achan", "jsalas", "kmelendez"
 ]
 

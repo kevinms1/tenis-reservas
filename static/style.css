@@ -1,6 +1,6 @@
-/* --- CONFIGURACIÓN GENERAL Y PC --- */
+/* --- CONFIGURACIÓN GENERAL (ESCRITORIO Y BASE) --- */
 body { 
-    font-family: 'Segoe UI', sans-serif; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
     text-align: center; 
     background-color: #f0f4f0; 
     color: #2c3e50; 
@@ -8,22 +8,39 @@ body {
     padding: 0;
 }
 
-h2 { margin-top: 15px; margin-bottom: 10px; }
+h2 { 
+    margin-top: 15px; 
+    margin-bottom: 10px; 
+    color: #2d5a27;
+}
 
-/* Navegación de semanas */
-.week-navigation { margin-bottom: 20px; }
-.week-navigation a { 
+/* Navegación */
+.nav-container { 
+    margin-bottom: 20px; 
+}
+
+.btn-nav { 
+    display: inline-block;
     color: #2d5a27; 
     text-decoration: none; 
     font-weight: bold; 
-    border: 1px solid #2d5a27;
-    padding: 5px 10px;
-    border-radius: 5px;
+    border: 2px solid #2d5a27;
+    padding: 8px 15px;
+    border-radius: 6px;
+    background-color: white;
+    margin: 0 5px;
+    transition: 0.3s;
 }
 
+.btn-nav:hover {
+    background-color: #2d5a27;
+    color: white;
+}
+
+/* Tabla Contenedor */
 .table-wrapper { 
     width: 95%; 
-    margin: 0 auto; 
+    margin: 0 auto 30px auto; 
     overflow-x: auto; 
     background: white; 
     border-radius: 8px; 
@@ -33,86 +50,114 @@ h2 { margin-top: 15px; margin-bottom: 10px; }
 table { 
     width: 100%; 
     border-collapse: collapse; 
+    table-layout: fixed;
 }
 
-/* Escritorio */
-@media (min-width: 769px) {
-    table { min-width: 800px; }
+/* Estilos de Celda Escritorio */
+th, td { 
+    border: 1px solid #ddd; 
+    padding: 12px; 
+    text-align: center; 
+    overflow: hidden;
 }
-
-th, td { border: 1px solid #ddd; padding: 12px; text-align: center; }
 
 th { 
     background-color: #2d5a27 !important; 
     color: white; 
 }
 
-.hora-col { background-color: #f8f9fa; font-weight: bold; width: 80px; }
-.celda { cursor: pointer; transition: 0.3s; height: 40px; }
-.celda:hover:not(.ocupado) { background-color: #d4edda; }
+.hora-col { 
+    background-color: #f8f9fa; 
+    font-weight: bold; 
+    width: 80px; 
+}
+
+.celda { 
+    cursor: pointer; 
+    transition: 0.3s; 
+    height: 45px;
+    font-size: 14px;
+}
+
+.celda:hover:not(.ocupado) { 
+    background-color: #d4edda; 
+}
 
 .ocupado { 
     background-color: #c0392b !important; 
     color: white; 
+    font-weight: bold;
 }
 
-/* --- VISTA MÓVIL OPTIMIZADA (AJUSTE PARA CAPTURA DE PANTALLA) --- */
+/* --- VISTA MÓVIL (OPTIMIZADA PARA CAPTURA DE PANTALLA ÚNICA) --- */
 @media (max-width: 768px) {
     
-    /* 1. OCULTAR BOTONES DE SEMANA ANTERIOR/SIGUIENTE */
-    .week-navigation { 
-        display: none !important; 
+    /* 1. Reducción de márgenes superiores para ganar espacio vertical */
+    h2 { 
+        font-size: 14px; 
+        margin: 5px 0; 
     }
 
-    /* 2. AJUSTAR CONTENEDOR PARA QUE NO TENGA MÁRGENES */
+    .nav-container { 
+        margin-bottom: 8px !important; 
+    }
+
+    .btn-nav {
+        padding: 4px 10px !important;
+        font-size: 12px !important;
+    }
+
+    /* 2. Ajuste total del contenedor */
     .table-wrapper {
         width: 100% !important;
         margin: 0 !important;
-        overflow: hidden !important; 
         border-radius: 0;
         box-shadow: none;
     }
 
-    table {
-        table-layout: fixed !important; 
-        width: 100% !important;
-    }
-
-    /* Ocultar días que no son hoy ni mañana */
+    /* 3. Control de columnas: Solo Hora, Hoy y Mañana */
     th[data-fecha], 
     td[data-fecha] {
         display: none;
     }
 
-    /* Mostrar solo Hora, Hoy y Mañana */
     .hora-col, 
     .show-mobile {
         display: table-cell !important;
     }
 
-    /* REDUCCIÓN DE TAMAÑOS PARA QUE QUEPA TODO */
+    /* 4. Proporciones de columnas para móviles */
     .hora-col {
-        width: 18% !important;
-        font-size: 11px !important;
-        padding: 4px 1px !important; /* Padding mínimo */
+        width: 16% !important;
+        font-size: 10px !important;
+        padding: 2px 0 !important;
     }
 
     .show-mobile {
-        width: 41% !important;
-        font-size: 10px !important;
-        padding: 4px 1px !important; /* Padding mínimo */
+        width: 42% !important;
+        font-size: 9px !important;
+        padding: 2px 1px !important;
+        word-break: break-all; /* Evita que nombres largos ensanchen la fila */
     }
 
-    /* Reducir altura de filas para evitar el scroll */
-    .celda {
-        height: 32px !important; /* Reducido de 55px a 32px */
-        line-height: 1 !important;
-    }
-
+    /* 5. REDUCCIÓN CRÍTICA DE ALTURA (Para evitar scroll) */
     th {
-        padding: 6px 2px !important;
+        padding: 4px 1px !important;
         font-size: 11px !important;
     }
 
-    h2 { font-size: 16px; margin: 8px 0; }
+    tr {
+        height: 24px !important; /* Altura mínima para que quepa todo el rango 6am-8pm */
+    }
+
+    .celda {
+        height: 24px !important;
+        line-height: 1 !important; /* Mantiene el texto centrado */
+        padding: 0 !important;
+    }
+
+    /* Opcional: ocultar el texto de la fecha para ganar más espacio si fuera necesario */
+    th br {
+        display: block;
+    }
 }
